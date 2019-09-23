@@ -1,5 +1,5 @@
 # Seconds Since Last Injury
-An LED counter increments every second. Pressing the button delivers a 48,000 Volt shock and resets the counter to zero.
+An LED counter increments every second. Pressing the button delivers a 48,000 Volt shock and resets the counter to zero. Hilarity ensues.
 
 ![Seconds Since Last Injury installation at Night Market 2019](https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/seconds_since_last_injury-night_market-2019.jpg)
 
@@ -8,13 +8,21 @@ An LED counter increments every second. Pressing the button delivers a 48,000 Vo
 * 1x [Nova Violet Wand (Model SN-B)](https://www.violetwands.com/shop/nova-violetwand-model-snb/)
 * 1x [P10 SMD LED Sign 40"x8"](https://www.amazon.com/Scrolling-Display-Message-Solution-Advertising/dp/B077G7D4ZH)
 * 1x [Arduino Mega](https://store.arduino.cc/usa/mega-2560-r3)
+* 1x [Adafruit Feather 32u4 Basic Proto](https://www.adafruit.com/product/2771)
 * 4x [TPIC6C595N bit shifters](https://www.mouser.com/ProductDetail/texas-instruments/tpic6c595n/)
 * 28x TIP125 PNP transistors
 * 28x 68Ω resistors
 * 28x 2KΩ resistors
-* 4x [proto boards](https://www.adafruit.com/product/571)
+* 1x 1KΩ resistor
+* 1x 7.5Ω resistor
+* 2x [IR LEDs](https://www.adafruit.com/product/387)
+* 1x [IR Receiver](https://www.adafruit.com/product/157)
+* 1x [PN2222 Transistor](https://www.adafruit.com/product/756)
+* 5x [proto boards](https://www.adafruit.com/product/571)
 * 1x [button](https://www.mouser.com/ProductDetail/e-switch/pv10f2v0ss-311)
 * 1x 24V Power Supply
+* 1x 9V Power Supply
 
 ## Wiring
-![Partial wiring diagram](https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic.png)
+<img src="https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic-main.png" width=600px />
+<img src="https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic-IR-transmitter.png" width=400px />
