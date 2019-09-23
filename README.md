@@ -1,5 +1,5 @@
 # Seconds Since Last Injury
-An LED counter increments every second. Pressing the button delivers a 48,000 Volt shock and resets the counter to zero. Hilarity ensues.
+An LED counter increments every second. Pressing the button delivers a 48,000 Volt shock and resets the counter to zero. [Hilarity ensues](https://jasoneppink.com/seconds-since-last-injury/).
 
 ![Seconds Since Last Injury installation at Night Market 2019](https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/seconds_since_last_injury-night_market-2019.jpg)
 
