@@ -1,30 +1,29 @@
 // based on https://playground.arduino.cc/Main/CountUpDownTimer/
-//Pin connected to SER IN (Serial Data Input) of TPIC6
-int SerIn_ones = 26;
-////Pin connected to SRCK (Shift Register Clock) of TPIC6
-int SRCK_ones = 24;
-//Pin connected to RCK (Register Clock aka latch key) of TPIC6
-int RCK_ones = 22;
 
-//Pin connected to SER IN (Serial Data Input) of TPIC6
+#include <IRremote.h>
+int recvPin = 53; //IR Receiver (other pins go to 3.3V and GND)
+IRrecv irrecv(recvPin);
+
+//Ones SER IN (Serial Data Input) of TPIC6C595
+int SerIn_ones = 35;
+//Ones SRCK (Shift Register Clock) of TPIC6C595
+int SRCK_ones = 33;
+//Ones RCK (Register Clock aka latch key) of TPIC6C595
+int RCK_ones = 31;
+
+//Tens Digit | Arduino -> TPIC6C595
 int SerIn_tens = 32;
-////Pin connected to SRCK (Shift Register Clock) of TPIC6
 int SRCK_tens = 30;
-//Pin connected to RCK (Register Clock aka latch key) of TPIC6
 int RCK_tens = 28;
 
-//Pin connected to SER IN (Serial Data Input) of TPIC6
+//Hundreds Digit | Arduino -> TPIC6C595
 int SerIn_hundreds = 38;
-////Pin connected to SRCK (Shift Register Clock) of TPIC6
 int SRCK_hundreds = 36;
-//Pin connected to RCK (Register Clock aka latch key) of TPIC6
 int RCK_hundreds = 34;
 
-//Pin connected to SER IN (Serial Data Input) of TPIC6
+//Thousands Digit | Arduino -> TPIC6C595
 int SerIn_thousands = 44;
-////Pin connected to SRCK (Shift Register Clock) of TPIC6
 int SRCK_thousands = 42;
-//Pin connected to RCK (Register Clock aka latch key) of TPIC6
 int RCK_thousands = 40;
 
 
@@ -32,10 +31,12 @@ unsigned long Watch, _micro, time = micros();
 unsigned int Clock = 0, R_clock;
 boolean Reset = false;
 volatile boolean timeFlag = false;
-//int button_val = 0;
 
 void setup()
 {
+
+  irrecv.enableIRIn();  // Start the IR receiver
+  
   //7 segment LED
   pinMode(SerIn_ones, OUTPUT);
   pinMode(SRCK_ones, OUTPUT);
@@ -50,11 +51,7 @@ void setup()
   pinMode(SRCK_thousands, OUTPUT);
   pinMode(RCK_thousands, OUTPUT);
 
-  //button
-  pinMode(48, OUTPUT); //button LED
-  pinMode(50, OUTPUT); //wired to RESET 
-
-  //DebugOnStartup();
+  DebugOnStartup();
 
   digitalWrite(RCK_ones, LOW);
   shiftOut(SerIn_ones, SRCK_ones, LSBFIRST, B00000000);
@@ -79,39 +76,37 @@ void setup()
   Serial.begin(9600);
   StartTimer();
 }
-//void(* resetFunc) (void) = 0; //declare reset function @ address 0
 
 void loop()
 { 
+  decode_results  results;        // Somewhere to store the IR input results
+  
   CountUpTimer(); // run the timer
   digitalWrite(48, HIGH); //turn button LED on
-/*
-  button_val = digitalRead(50);  // read input value
-  if (button_val == HIGH) {         // check if the input is HIGH (button released)
-    digitalWrite(48, HIGH);
-  } else {
-    Serial.println("button pressed");
-    Clock = 0;
-    digitalWrite(48, LOW);
+
+  if (irrecv.decode(&results)) {  // Grab an IR code
+    if (buttonPressed(&results)) {
+
+      Serial.println("button pressed");
+      Clock = 0;
    
-
-    //immediately turn all off
-     digitalWrite(RCK_ones, LOW);
-     shiftOut(SerIn_ones, SRCK_ones, LSBFIRST, B00000000);
-     digitalWrite(RCK_ones, HIGH);
-     digitalWrite(RCK_tens, LOW);
-     shiftOut(SerIn_tens, SRCK_tens, LSBFIRST, B00000000);
-     digitalWrite(RCK_tens, HIGH);
-     digitalWrite(RCK_hundreds, LOW);
-     shiftOut(SerIn_hundreds, SRCK_hundreds, LSBFIRST, B00000000);
-     digitalWrite(RCK_hundreds, HIGH);
-     digitalWrite(RCK_thousands, LOW);
-     shiftOut(SerIn_thousands, SRCK_thousands, LSBFIRST, B00000000);
-     digitalWrite(RCK_thousands, HIGH);
-
-     //resetFunc();
+      //immediately turn all off
+       digitalWrite(RCK_ones, LOW);
+       shiftOut(SerIn_ones, SRCK_ones, LSBFIRST, B00000000);
+       digitalWrite(RCK_ones, HIGH);
+       digitalWrite(RCK_tens, LOW);
+       shiftOut(SerIn_tens, SRCK_tens, LSBFIRST, B00000000);
+       digitalWrite(RCK_tens, HIGH);
+       digitalWrite(RCK_hundreds, LOW);
+       shiftOut(SerIn_hundreds, SRCK_hundreds, LSBFIRST, B00000000);
+       digitalWrite(RCK_hundreds, HIGH);
+       digitalWrite(RCK_thousands, LOW);
+       shiftOut(SerIn_thousands, SRCK_thousands, LSBFIRST, B00000000);
+       digitalWrite(RCK_thousands, HIGH);
+    }
+    irrecv.resume();              // Prepare for the next value
   }
-*/ 
+  
 
   // this prevents the time from being constantly shown.
   if (TimeHasChanged() ) 
@@ -157,7 +152,10 @@ void loop()
     }
     
     if (Clock == 0) {
-       //turn off all other digits (otherwise they'll be stuck at 9)
+       //turn ones digit to "0" and all other digits off (otherwise they'll be stuck at 9)
+       digitalWrite(RCK_ones, LOW);
+       shiftOut(SerIn_ones, SRCK_ones, LSBFIRST, B11111010);
+       digitalWrite(RCK_ones, HIGH);
        digitalWrite(RCK_tens, LOW);
        shiftOut(SerIn_tens, SRCK_tens, LSBFIRST, B00000000);
        digitalWrite(RCK_tens, HIGH);
@@ -419,6 +417,16 @@ void DebugOnStartup()
     digitalWrite(RCK_thousands, LOW);
     shiftOut(SerIn_thousands, SRCK_thousands, LSBFIRST, B11111010);
     digitalWrite(RCK_thousands, HIGH);
-    delay(500);
-  
+    delay(500); 
+}
+
+
+bool  buttonPressed (decode_results *results)
+{
+  if((results->decode_type == SONY) && (results->value == 2704)) {
+    //2704 = A90
+    return true;
+  } else {
+    return false;
+  }
 }
