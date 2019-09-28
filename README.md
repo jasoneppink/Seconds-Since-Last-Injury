@@ -13,8 +13,10 @@ An LED counter increments every second. Pressing the button delivers a 48,000 Vo
 * 28x TIP125 PNP transistors
 * 28x 68Ω resistors
 * 28x 2KΩ resistors
-* 1x 1KΩ resistor
+* 2x 1KΩ resistor
+* 1x 22KΩ resistor
 * 1x 7.5Ω resistor
+* 1x .22uf capacitor
 * 2x [IR LEDs](https://www.adafruit.com/product/387)
 * 1x [IR Receiver](https://www.adafruit.com/product/157)
 * 1x [PN2222 Transistor](https://www.adafruit.com/product/756)
@@ -26,3 +28,9 @@ An LED counter increments every second. Pressing the button delivers a 48,000 Vo
 ## Wiring
 <img src="https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic-main.png" width=600px />
 <img src="https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic-IR-transmit.png" width=400px />
+
+## Notes for reducing EMI
+* Create a compartment for the Violet Wand, wrap it in aluminum foil, and ground it (earth ground AND via extension cord).
+* Wrap cables generously with [ferrite beads](https://www.amazon.com/eBoot-Pieces-Ferrite-Suppressor-Diameter/dp/B01E5E5IY4).
+* Keep counter board suspended above (and insulated from) the ground.
+* An [Isolation Transformer](https://www.tripplite.com/isolator-series-120v-250w-isolation-transformer-based-power-conditioner-2-outlets~IS250) may or may not be helpful.
