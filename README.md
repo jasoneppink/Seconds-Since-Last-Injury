@@ -25,4 +25,4 @@ An LED counter increments every second. Pressing the button delivers a 48,000 Vo
 
 ## Wiring
 <img src="https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic-main.png" width=600px />
-<img src="https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic-IR-transmitter.png" width=400px />
+<img src="https://github.com/jasoneppink/Seconds-Since-Last-Injury/blob/master/wiring-schematic-IR-transmit.png" width=400px />
